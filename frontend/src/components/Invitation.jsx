@@ -8,27 +8,26 @@ import Dove from "./Dove";
 import AudioToggle from "./AudioToggle";
 import SkipButton from "./SkipButton";
 import Particles from "./Particles";
-import Lanterns from "./Lanterns";
+
+import ForestScene from "./scenes/ForestScene";
+import RiverScene from "./scenes/RiverScene";
+import TempleScene from "./scenes/TempleScene";
+import NightScene from "./scenes/NightScene";
+
+import Mandala from "./motifs/Mandala";
+import Lotus from "./motifs/Lotus";
+import Diya from "./motifs/Diya";
+import Toran from "./motifs/Toran";
+import Paisley from "./motifs/Paisley";
+import OmSymbol from "./motifs/OmSymbol";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const IMG = {
-  forest:
-    "https://images.unsplash.com/photo-1761920521457-ce2b0dbb67aa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwyfHxteXN0aWNhbCUyMGRhcmslMjBmb3Jlc3QlMjBzdW5yYXlzfGVufDB8fHx8MTc3Njc2MjAxM3ww&ixlib=rb-4.1.0&q=85",
-  river:
-    "https://static.prod-images.emergentagent.com/jobs/a18d11ab-a86c-4b17-91b5-6305f482d719/images/38403f343eb3d74066501a693790a45934cc98096ed62430fef8c732e3b58b97.png",
-  temple:
-    "https://images.unsplash.com/photo-1765298409890-45d17b3ac8f9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjB0ZW1wbGUlMjBzaWxob3VldHRlfGVufDB8fHx8MTc3Njc2MjAxM3ww&ixlib=rb-4.1.0&q=85",
-  lanterns:
-    "https://images.pexels.com/photos/4870192/pexels-photo-4870192.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-};
 
 const EVENT = {
   bride: "Bhumika Darbar",
   brideParents: "Daughter of Hinaben & DharmaSinh",
   groom: "Arpit Patel",
   groomParents: "Son of Vinaben & Prafullchandra",
-  date: "10 MAY 2026",
   dateLong: "Sunday, 10th May 2026",
   time: "3:00 PM onwards",
   dinner: "5:00 PM",
@@ -37,14 +36,12 @@ const EVENT = {
   maps: "https://share.google/GOfs4sIcSrrG3Gx7o",
 };
 
-// Google Calendar link (UTC times for 10 May 2026 3PM IST -> 09:30 UTC)
 const CAL_URL = (() => {
   const title = encodeURIComponent("Bhumika & Arpit · Engagement");
   const details = encodeURIComponent(
     "Join us for the engagement of Bhumika Darbar & Arpit Patel.\nDinner at 5:00 PM.\n" + EVENT.maps
   );
   const location = encodeURIComponent(EVENT.venue + ", " + EVENT.city);
-  // 3:00 PM IST = 09:30 UTC; dinner ends ~10:00 PM IST = 16:30 UTC
   const dates = "20260510T093000Z/20260510T163000Z";
   return `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${dates}`;
 })();
@@ -78,11 +75,10 @@ export default function Invitation() {
     };
   }, []);
 
-  // Word-by-word reveal for elements with [data-reveal]
+  // GSAP animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const blocks = gsap.utils.toArray("[data-reveal]");
-      blocks.forEach((block) => {
+      gsap.utils.toArray("[data-reveal]").forEach((block) => {
         const words = block.querySelectorAll(".reveal-word");
         gsap.to(words, {
           opacity: 1,
@@ -99,11 +95,9 @@ export default function Invitation() {
         });
       });
 
-      // Dove flight path — tied to full-page scroll
       const doveEl = doveRef.current;
       if (doveEl) {
         gsap.set(doveEl, { xPercent: -20, yPercent: -10, opacity: 0, scale: 0.6 });
-
         const vh = () => window.innerHeight;
         const vw = () => window.innerWidth;
 
@@ -115,10 +109,7 @@ export default function Invitation() {
             scrub: 1.2,
           },
         });
-
-        // Act 1 → appears
         tl.to(doveEl, { opacity: 0, duration: 0.05 }, 0);
-        // Act 2 — enter from top-left, glide to right
         tl.to(doveEl, { opacity: 1, scale: 0.9, duration: 0.05 }, 0.15);
         tl.to(doveEl, {
           x: () => vw() * 0.55,
@@ -127,7 +118,6 @@ export default function Invitation() {
           duration: 0.25,
           ease: "sine.inOut",
         }, 0.18);
-        // Act 3 — curve across river/temple
         tl.to(doveEl, {
           x: () => vw() * 0.1,
           y: () => vh() * 0.55,
@@ -143,7 +133,6 @@ export default function Invitation() {
           duration: 0.2,
           ease: "sine.inOut",
         }, 0.62);
-        // Act 4 — fly up and out (leave the message behind)
         tl.to(doveEl, {
           x: () => vw() * 0.75,
           y: () => -vh() * 0.15,
@@ -155,7 +144,6 @@ export default function Invitation() {
         tl.to(doveEl, { opacity: 0, duration: 0.06 }, 0.78);
       }
 
-      // Parchment unroll
       if (parchmentRef.current) {
         gsap.set(parchmentRef.current, { scaleY: 0.02, opacity: 0 });
         gsap.to(parchmentRef.current, {
@@ -170,26 +158,12 @@ export default function Invitation() {
           },
         });
       }
-
-      // Parallax on scene backgrounds
-      gsap.utils.toArray(".scene-bg[data-parallax]").forEach((el) => {
-        gsap.to(el, {
-          yPercent: 12,
-          ease: "none",
-          scrollTrigger: {
-            trigger: el.parentElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      });
     }, rootRef);
 
     return () => ctx.revert();
   }, []);
 
-  // Hide skip button once user has reached the details section
+  // Hide skip button past 60% scroll
   useEffect(() => {
     const onScroll = () => {
       const progress = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
@@ -200,7 +174,6 @@ export default function Invitation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Ripple on river click/touch
   const addRipple = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.touches?.[0]?.clientX ?? e.clientX) - rect.left;
@@ -221,7 +194,6 @@ export default function Invitation() {
       <AudioToggle muted={muted} setMuted={setMuted} />
       {showSkip && <SkipButton onClick={scrollToDetails} />}
 
-      {/* Fixed Dove across all acts */}
       <div
         ref={doveRef}
         className="dove-wrap"
@@ -233,23 +205,8 @@ export default function Invitation() {
       </div>
 
       {/* ============ ACT 1 · AWAKENING FOREST ============ */}
-      <section className="scene" data-testid="act-1-forest" style={{ background: "var(--bg-forest)" }}>
-        <div
-          className="scene-bg"
-          data-parallax
-          style={{
-            backgroundImage: `url("${IMG.forest}")`,
-            filter: "brightness(0.55) saturate(1.05)",
-          }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none z-[1]"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(11,26,20,0.85) 0%, rgba(11,26,20,0.35) 45%, rgba(11,26,20,0.85) 100%)",
-          }}
-        />
-        <div className="sunrays z-[2]" />
+      <section className="scene" data-testid="act-1-forest">
+        <ForestScene />
         <Particles count={22} />
         <div className="grain-overlay" />
         <div className="vignette" />
@@ -261,7 +218,14 @@ export default function Invitation() {
             transition={{ duration: 2.4, ease: [0.25, 0.1, 0.25, 1] }}
             className="flex flex-col items-center"
           >
-            <div className="intro-dot mb-10" />
+            {/* Floating Om above the title */}
+            <div
+              className="mb-6"
+              style={{ filter: "drop-shadow(0 0 14px rgba(232,201,106,0.6))", animation: "om-pulse 5s ease-in-out infinite" }}
+            >
+              <OmSymbol size={44} color="#E8C96A" />
+            </div>
+
             <span className="font-accent text-[10px] md:text-xs text-[var(--gold)] mb-6">
               A Divine Message in the Wind
             </span>
@@ -285,20 +249,12 @@ export default function Invitation() {
       </section>
 
       {/* ============ ACT 2 · DIVINE MESSENGER ============ */}
-      <section className="scene" data-testid="act-2-messenger" style={{ background: "var(--bg-midnight)" }}>
-        <div
-          className="scene-bg"
-          data-parallax
-          style={{
-            backgroundImage: `url("${IMG.forest}")`,
-            filter: "brightness(0.4) hue-rotate(-8deg) saturate(1.1) blur(2px)",
-          }}
-        />
+      <section className="scene" data-testid="act-2-messenger">
+        <ForestScene />
         <div
           className="absolute inset-0 pointer-events-none z-[1]"
           style={{
-            background:
-              "radial-gradient(ellipse at 65% 40%, rgba(232,201,106,0.18), transparent 55%), linear-gradient(180deg, rgba(9,13,23,0.6) 0%, rgba(9,13,23,0.9) 100%)",
+            background: "radial-gradient(ellipse at 65% 40%, rgba(232,201,106,0.18), transparent 55%)",
           }}
         />
         <Particles count={18} />
@@ -339,31 +295,15 @@ export default function Invitation() {
       <section
         className="scene"
         data-testid="act-3-journey-river"
-        style={{ background: "var(--bg-river)" }}
         onClick={addRipple}
         onTouchStart={addRipple}
       >
-        <div
-          className="scene-bg"
-          data-parallax
-          style={{
-            backgroundImage: `url("${IMG.river}")`,
-            filter: "brightness(0.7) saturate(1.15)",
-          }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none z-[1]"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(12,30,44,0.55) 0%, rgba(12,30,44,0.1) 40%, rgba(12,30,44,0.8) 100%)",
-          }}
-        />
+        <RiverScene />
         <div className="grain-overlay" />
         <div className="vignette" />
 
-        {/* Ripples rendered here */}
         {rippleList.map((r) => (
-          <span key={r.id} className="ripple" style={{ left: r.x, top: r.y }} />
+          <span key={r.id} className="ripple" style={{ left: r.x, top: r.y, zIndex: 5 }} />
         ))}
 
         <div className="scene-content">
@@ -383,22 +323,8 @@ export default function Invitation() {
       </section>
 
       {/* ============ ACT 3b · TEMPLE HORIZON ============ */}
-      <section className="scene" data-testid="act-3-journey-temple" style={{ background: "var(--bg-dusk)" }}>
-        <div
-          className="scene-bg"
-          data-parallax
-          style={{
-            backgroundImage: `url("${IMG.temple}")`,
-            filter: "brightness(0.55) saturate(1.1)",
-          }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none z-[1]"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 70%, rgba(212,175,55,0.25), transparent 55%), linear-gradient(180deg, rgba(26,15,28,0.8) 0%, rgba(26,15,28,0.2) 50%, rgba(26,15,28,0.9) 100%)",
-          }}
-        />
+      <section className="scene" data-testid="act-3-journey-temple">
+        <TempleScene />
         <Particles count={14} />
         <div className="grain-overlay" />
         <div className="vignette" />
@@ -422,28 +348,51 @@ export default function Invitation() {
         data-testid="act-4-reveal"
         style={{ background: "var(--bg-night)" }}
       >
+        {/* Animated backdrop — mandala halo + stars */}
         <div
           className="absolute inset-0 z-0"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 40%, rgba(212,175,55,0.18), transparent 65%), #05080f",
+              "radial-gradient(ellipse at 50% 40%, rgba(212,175,55,0.22), transparent 65%), #05080f",
           }}
         />
+        <div
+          className="absolute left-1/2 top-[18%] -translate-x-1/2 -translate-y-1/2 z-0"
+          style={{ filter: "drop-shadow(0 0 40px rgba(212,175,55,0.35))" }}
+        >
+          <Mandala size={420} color="#D4AF37" opacity={0.18} speed={100} />
+        </div>
         <Particles count={16} />
         <div className="grain-overlay" />
         <div className="vignette" />
 
         <div className="scene-content">
-          <span className="font-accent text-[10px] text-[var(--gold)]/80 mb-8">
+          <span className="font-accent text-[10px] text-[var(--gold)]/80 mb-6">
             the message unrolls
           </span>
 
-          <div ref={parchmentRef} className="parchment" data-testid="parchment-card">
+          <div ref={parchmentRef} className="parchment relative" data-testid="parchment-card">
             <span className="parchment-edge top" />
             <span className="parchment-edge bottom" />
 
-            <div className="text-center">
-              <p className="font-accent text-[10px] md:text-[11px] text-[#7a5a1c] mb-8">
+            {/* Toran hanging from top */}
+            <div className="absolute left-1/2 -translate-x-1/2 -top-14 z-20 pointer-events-none">
+              <Toran width={320} />
+            </div>
+
+            {/* Corner paisleys */}
+            <div className="absolute top-6 left-4 opacity-80"><Paisley size={40} color="#8a6818" /></div>
+            <div className="absolute top-6 right-4 opacity-80"><Paisley size={40} color="#8a6818" flipX /></div>
+            <div className="absolute bottom-6 left-4 opacity-80" style={{ transform: "scaleY(-1)" }}><Paisley size={40} color="#8a6818" /></div>
+            <div className="absolute bottom-6 right-4 opacity-80" style={{ transform: "scale(-1, -1)" }}><Paisley size={40} color="#8a6818" /></div>
+
+            <div className="text-center relative z-10 pt-6">
+              {/* Om at top of card */}
+              <div className="flex justify-center mb-4">
+                <OmSymbol size={38} color="#7a5a1c" />
+              </div>
+
+              <p className="font-accent text-[10px] md:text-[11px] text-[#7a5a1c] mb-6 tracking-[0.25em]">
                 ✦ with the blessings of our elders ✦
               </p>
 
@@ -454,9 +403,20 @@ export default function Invitation() {
                 {EVENT.bride}
               </h2>
 
-              <p className="font-serif-display italic text-2xl md:text-3xl text-[#7a5a1c] my-5">
+              {/* Floral divider with lotus center */}
+              <div className="flex justify-center items-center my-4 gap-3">
+                <span className="h-px w-10 bg-gradient-to-r from-transparent via-[#B48521] to-[#B48521]" />
+                <Lotus size={34} color="#7a5a1c" opacity={0.85} />
+                <span className="h-px w-10 bg-gradient-to-r from-[#B48521] via-[#B48521] to-transparent" />
+              </div>
+              <p className="font-serif-display italic text-2xl md:text-3xl text-[#7a5a1c]">
                 &amp;
               </p>
+              <div className="flex justify-center items-center my-4 gap-3">
+                <span className="h-px w-10 bg-gradient-to-r from-transparent via-[#B48521] to-[#B48521]" />
+                <Lotus size={34} color="#7a5a1c" opacity={0.85} />
+                <span className="h-px w-10 bg-gradient-to-r from-[#B48521] via-[#B48521] to-transparent" />
+              </div>
 
               <p className="font-sans-body text-sm md:text-base text-[var(--ink)]/75">
                 {EVENT.groomParents}
@@ -465,8 +425,10 @@ export default function Invitation() {
                 {EVENT.groom}
               </h2>
 
-              <div className="gold-divider my-9" style={{ color: "#7a5a1c" }}>
-                <span className="font-accent text-[10px]">request your presence</span>
+              <div className="flex justify-center mt-8 mb-6">
+                <span className="flourish-line w-full max-w-[280px]">
+                  <span className="font-accent text-[10px] whitespace-nowrap">request your presence</span>
+                </span>
               </div>
 
               <div className="space-y-4 font-sans-body text-[var(--ink)]">
@@ -492,29 +454,21 @@ export default function Invitation() {
                   </p>
                 </div>
               </div>
+
+              {/* Diya row at the bottom of the parchment */}
+              <div className="diya-row mt-8">
+                <Diya size={54} />
+                <Diya size={64} />
+                <Diya size={54} />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ============ ACT 5 · ENDING · LANTERNS ============ */}
-      <section className="scene" data-testid="act-5-ending" style={{ background: "#030510" }}>
-        <div
-          className="scene-bg"
-          data-parallax
-          style={{
-            backgroundImage: `url("${IMG.lanterns}")`,
-            filter: "brightness(0.55) saturate(1.2)",
-          }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none z-[1]"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 70%, rgba(232,160,60,0.25), transparent 60%), linear-gradient(180deg, rgba(3,5,16,0.4) 0%, rgba(3,5,16,0.85) 100%)",
-          }}
-        />
-        <Lanterns count={14} />
+      {/* ============ ACT 5 · ENDING · NIGHT SKY ============ */}
+      <section className="scene" data-testid="act-5-ending">
+        <NightScene />
         <div className="grain-overlay" />
         <div className="vignette" />
 
@@ -553,12 +507,18 @@ export default function Invitation() {
             </a>
           </div>
 
-          <div className="mt-24 font-serif-display italic text-[var(--gold-soft)] text-lg md:text-xl">
-            Bhumika <span className="mx-2 text-[var(--gold)]">✦</span> Arpit
+          {/* Couple mandala sign-off */}
+          <div className="mt-20 flex flex-col items-center gap-3">
+            <div style={{ filter: "drop-shadow(0 0 20px rgba(212,175,55,0.4))" }}>
+              <Mandala size={90} color="#D4AF37" opacity={0.7} speed={40} />
+            </div>
+            <div className="font-serif-display italic text-[var(--gold-soft)] text-lg md:text-xl">
+              Bhumika <span className="mx-2 text-[var(--gold)]">✦</span> Arpit
+            </div>
+            <p className="font-accent text-[10px] text-[var(--ivory-dim)]">
+              10 · 05 · 2026
+            </p>
           </div>
-          <p className="mt-2 font-accent text-[10px] text-[var(--ivory-dim)]">
-            10 · 05 · 2026
-          </p>
         </div>
       </section>
     </div>
