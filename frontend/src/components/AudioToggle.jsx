@@ -9,7 +9,41 @@ export default function AudioToggle({ muted, setMuted }) {
     if (!a) return;
     a.volume = 0.72;
     a.loop = true;
-    a.play().then(() => setMuted(false)).catch(() => setMuted(true));
+
+    let started = false;
+
+    const startAudio = () => {
+      if (started) return;
+      a.play()
+        .then(() => {
+          started = true;
+          setMuted(false);
+          document.removeEventListener("click", startAudio);
+          document.removeEventListener("touchstart", startAudio);
+          document.removeEventListener("scroll", startAudio);
+        })
+        .catch(() => {});
+    };
+
+    // Attempt autoplay immediately (works on some browsers / when prior interaction exists)
+    a.play()
+      .then(() => {
+        started = true;
+        setMuted(false);
+      })
+      .catch(() => {
+        // Browser requires a user gesture — fire on the very first interaction
+        setMuted(true);
+        document.addEventListener("click", startAudio, { passive: true });
+        document.addEventListener("touchstart", startAudio, { passive: true });
+        document.addEventListener("scroll", startAudio, { passive: true, once: true });
+      });
+
+    return () => {
+      document.removeEventListener("click", startAudio);
+      document.removeEventListener("touchstart", startAudio);
+      document.removeEventListener("scroll", startAudio);
+    };
   }, [setMuted]);
 
   const toggle = async () => {
@@ -23,8 +57,7 @@ export default function AudioToggle({ muted, setMuted }) {
         a.pause();
         setMuted(true);
       }
-    } catch (e) {
-      // Autoplay blocked — keep muted
+    } catch {
       setMuted(true);
     }
   };
