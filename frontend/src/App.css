@@ -495,3 +495,123 @@ html.lenis { height: auto; }
     animation: none !important;
   }
 }
+
+/* ============ Name shimmer ============ */
+.name-shimmer {
+  background: linear-gradient(
+    105deg,
+    #7a5a1c 30%,
+    #f0cb60 48%,
+    #e8b840 54%,
+    #7a5a1c 68%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: name-shimmer 4.5s linear infinite;
+}
+@keyframes name-shimmer {
+  from { background-position: 200% center; }
+  to   { background-position: -200% center; }
+}
+
+/* ============ Rose petals ============ */
+@keyframes petal-fall {
+  0%   { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+  8%   { opacity: 0.85; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(105vh) rotate(var(--petal-rot, 320deg)); opacity: 0; }
+}
+
+/* ============ Parchment animated border ============ */
+.parchment-border-top,
+.parchment-border-right,
+.parchment-border-bottom,
+.parchment-border-left {
+  position: absolute;
+  background: rgba(180, 133, 33, 0.65);
+  pointer-events: none;
+  z-index: 6;
+}
+.parchment-border-top {
+  top: 10px; left: 10px; right: 10px; height: 1px;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: border-slide-h 0.55s ease-out 0.3s forwards;
+}
+.parchment-border-right {
+  top: 10px; right: 10px; bottom: 10px; width: 1px;
+  transform: scaleY(0);
+  transform-origin: top;
+  animation: border-slide-v 0.65s ease-out 0.85s forwards;
+}
+.parchment-border-bottom {
+  bottom: 10px; left: 10px; right: 10px; height: 1px;
+  transform: scaleX(0);
+  transform-origin: right;
+  animation: border-slide-h 0.55s ease-out 1.5s forwards;
+}
+.parchment-border-left {
+  top: 10px; left: 10px; bottom: 10px; width: 1px;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  animation: border-slide-v 0.65s ease-out 2.05s forwards;
+}
+@keyframes border-slide-h {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes border-slide-v {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* ============ Star sparkle burst ============ */
+.star-sparkle {
+  width: 6px;
+  height: 6px;
+  background: #FFF6DC;
+  border-radius: 50%;
+  box-shadow:
+    0 0 8px 3px rgba(255, 246, 220, 0.9),
+    0 -36px 0 0 rgba(255, 246, 220, 0.7),
+    0  36px 0 0 rgba(255, 246, 220, 0.7),
+    36px 0  0 0 rgba(255, 246, 220, 0.7),
+   -36px 0  0 0 rgba(255, 246, 220, 0.7),
+    25px -25px 0 0 rgba(255, 246, 220, 0.55),
+   -25px -25px 0 0 rgba(255, 246, 220, 0.55),
+    25px  25px 0 0 rgba(255, 246, 220, 0.55),
+   -25px  25px 0 0 rgba(255, 246, 220, 0.55);
+  animation: star-sparkle-anim 0.85s ease-out forwards;
+}
+@keyframes star-sparkle-anim {
+  0%   { transform: scale(0); opacity: 1; }
+  40%  { opacity: 1; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* ============ Medallion frames ============ */
+.medallion-frame {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5eccc, #ead8a2);
+  border: 2.5px solid #B48521;
+  box-shadow: 0 0 0 1px rgba(212,175,55,0.25), 0 0 18px rgba(212,175,55,0.25);
+  flex-shrink: 0;
+}
+.medallion-letter {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 2.4rem;
+  font-weight: 600;
+  font-style: italic;
+  color: #7a5a1c;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}

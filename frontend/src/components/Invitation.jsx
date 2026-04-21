@@ -20,6 +20,7 @@ import Diya from "./motifs/Diya";
 import Toran from "./motifs/Toran";
 import Paisley from "./motifs/Paisley";
 import OmSymbol from "./motifs/OmSymbol";
+import RosePetals from "./RosePetals";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,7 +33,7 @@ const EVENT = {
   time: "3:00 PM onwards",
   dinner: "5:00 PM",
   venue: "Shri Surat Jilla Leuva Patidar Samaj Vadi",
-  city: "Surat, Gujarat",
+  city: "Bardoli, Surat, Gujarat",
   maps: "https://maps.app.goo.gl/sQTYYgP7wRsGdBBS6",
 };
 
@@ -46,10 +47,29 @@ const CAL_URL = (() => {
   return `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${dates}`;
 })();
 
+function MedallionFrame({ letter }) {
+  return (
+    <div className="medallion-frame">
+      <span className="medallion-letter">{letter}</span>
+      <svg
+        viewBox="0 0 104 104"
+        width="104"
+        height="104"
+        aria-hidden="true"
+        style={{ position: "absolute", top: -8, left: -8, pointerEvents: "none" }}
+      >
+        <circle cx="52" cy="52" r="50" fill="none" stroke="#D4AF37" strokeWidth="0.8" strokeDasharray="5 3" opacity="0.55" />
+        <circle cx="52" cy="52" r="47" fill="none" stroke="#B48521" strokeWidth="0.5" opacity="0.3" />
+      </svg>
+    </div>
+  );
+}
+
 export default function Invitation() {
   const rootRef = useRef(null);
   const doveRef = useRef(null);
   const parchmentRef = useRef(null);
+  const lotusPreviewRef = useRef(null);
   const detailsRef = useRef(null);
   const [muted, setMuted] = useState(false);
   const [rippleList, setRippleList] = useState([]);
@@ -145,18 +165,26 @@ export default function Invitation() {
       }
 
       if (parchmentRef.current) {
-        gsap.set(parchmentRef.current, { scaleY: 0.02, opacity: 0 });
-        gsap.to(parchmentRef.current, {
-          scaleY: 1,
-          opacity: 1,
-          duration: 1.8,
-          ease: "power3.out",
+        const pEl = parchmentRef.current;
+        const lotusEl = lotusPreviewRef.current;
+        gsap.set(pEl, { scaleY: 0.02, opacity: 0 });
+
+        const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: parchmentRef.current,
+            trigger: pEl,
             start: "top 75%",
             toggleActions: "play none none reverse",
           },
         });
+
+        if (lotusEl) {
+          gsap.set(lotusEl, { scale: 0, opacity: 0 });
+          tl.to(lotusEl, { scale: 1.3, opacity: 1, duration: 0.65, ease: "back.out(1.7)" });
+          tl.to(lotusEl, { scale: 0, opacity: 0, duration: 0.35, ease: "power2.in" }, "+=0.3");
+          tl.to(pEl, { scaleY: 1, opacity: 1, duration: 1.8, ease: "power3.out" }, "-=0.1");
+        } else {
+          tl.to(pEl, { scaleY: 1, opacity: 1, duration: 1.8, ease: "power3.out" });
+        }
       }
     }, rootRef);
 
@@ -363,8 +391,26 @@ export default function Invitation() {
           <Mandala size={420} color="#D4AF37" opacity={0.18} speed={100} />
         </div>
         <Particles count={16} />
+        <RosePetals />
         <div className="grain-overlay" />
         <div className="vignette" />
+
+        {/* Lotus bloom that appears first, then fades as parchment unrolls */}
+        <div
+          ref={lotusPreviewRef}
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            marginLeft: -60,
+            marginTop: -60,
+            zIndex: 20,
+            pointerEvents: "none",
+            filter: "drop-shadow(0 0 32px rgba(212,175,55,0.95))",
+          }}
+        >
+          <Lotus size={120} color="#D4AF37" opacity={1} bloom />
+        </div>
 
         <div className="scene-content">
           <span className="font-accent text-[10px] text-[var(--gold)]/80 mb-6">
@@ -372,6 +418,12 @@ export default function Invitation() {
           </span>
 
           <div ref={parchmentRef} className="parchment relative" data-testid="parchment-card">
+            {/* Animated border that draws itself */}
+            <span className="parchment-border-top" />
+            <span className="parchment-border-right" />
+            <span className="parchment-border-bottom" />
+            <span className="parchment-border-left" />
+
             <span className="parchment-edge top" />
             <span className="parchment-edge bottom" />
 
@@ -388,46 +440,56 @@ export default function Invitation() {
 
             <div className="text-center relative z-10 pt-6">
               {/* Om at top of card */}
-              <div className="flex justify-center mb-4">
+              <div className="flex justify-center mb-3">
                 <OmSymbol size={38} color="#7a5a1c" />
               </div>
 
-              <p className="font-accent text-[10px] md:text-[11px] text-[#7a5a1c] mb-6 tracking-[0.25em]">
+              <p className="font-accent text-[9px] md:text-[10px] text-[#7a5a1c] tracking-[0.3em] mb-1">
+                ✦ shubh sagai · engagement ceremony ✦
+              </p>
+
+              {/* Sanskrit blessing */}
+              <p className="font-serif-display text-[1rem] text-[#9a7428] mt-2 mb-0" style={{ fontStyle: "italic" }}>
+                सह नाववतु · सह नौ भुनक्तु
+              </p>
+              <p className="font-accent text-[7px] text-[#7a5a1c]/60 tracking-widest mb-4">
+                may we walk together · may we grow together
+              </p>
+
+              <p className="font-accent text-[10px] md:text-[11px] text-[#7a5a1c] mb-5 tracking-[0.25em]">
                 ✦ with the blessings of our elders ✦
               </p>
 
               <p className="font-sans-body text-sm md:text-base text-[var(--ink)]/75">
                 {EVENT.brideParents}
               </p>
-              <h2 className="font-serif-display text-[2.4rem] md:text-5xl text-[var(--ink)] mt-1 tracking-tight">
+              <h2 className="name-shimmer font-serif-display text-[2.4rem] md:text-5xl mt-1 tracking-tight">
                 {EVENT.bride}
               </h2>
 
-              {/* Floral divider with lotus center */}
-              <div className="flex justify-center items-center my-4 gap-3">
-                <span className="h-px w-10 bg-gradient-to-r from-transparent via-[#B48521] to-[#B48521]" />
-                <Lotus size={34} color="#7a5a1c" opacity={0.85} />
-                <span className="h-px w-10 bg-gradient-to-r from-[#B48521] via-[#B48521] to-transparent" />
-              </div>
-              <p className="font-serif-display italic text-2xl md:text-3xl text-[#7a5a1c]">
-                &amp;
-              </p>
-              <div className="flex justify-center items-center my-4 gap-3">
-                <span className="h-px w-10 bg-gradient-to-r from-transparent via-[#B48521] to-[#B48521]" />
-                <Lotus size={34} color="#7a5a1c" opacity={0.85} />
-                <span className="h-px w-10 bg-gradient-to-r from-[#B48521] via-[#B48521] to-transparent" />
+              {/* Photo medallions with "&" divider */}
+              <div className="flex justify-center items-center my-5 gap-5">
+                <MedallionFrame letter="B" />
+                <div className="flex flex-col items-center gap-0">
+                  <Lotus size={28} color="#7a5a1c" opacity={0.75} />
+                  <p className="font-serif-display italic text-2xl md:text-3xl text-[#7a5a1c] leading-none my-1">
+                    &amp;
+                  </p>
+                  <Lotus size={28} color="#7a5a1c" opacity={0.75} />
+                </div>
+                <MedallionFrame letter="A" />
               </div>
 
               <p className="font-sans-body text-sm md:text-base text-[var(--ink)]/75">
                 {EVENT.groomParents}
               </p>
-              <h2 className="font-serif-display text-[2.4rem] md:text-5xl text-[var(--ink)] mt-1 tracking-tight">
+              <h2 className="name-shimmer font-serif-display text-[2.4rem] md:text-5xl mt-1 tracking-tight">
                 {EVENT.groom}
               </h2>
 
               <div className="flex justify-center mt-8 mb-6">
                 <span className="flourish-line w-full max-w-[280px]">
-                  <span className="font-accent text-[10px] whitespace-nowrap">request your presence</span>
+                  <span className="font-accent text-[10px] whitespace-nowrap">request the honour of your presence</span>
                 </span>
               </div>
 
@@ -437,7 +499,7 @@ export default function Invitation() {
                   <p className="font-serif-display text-2xl md:text-3xl">{EVENT.dateLong}</p>
                 </div>
                 <div>
-                  <p className="font-accent text-[10px] text-[#7a5a1c]">ceremony</p>
+                  <p className="font-accent text-[10px] text-[#7a5a1c]">engagement</p>
                   <p className="font-serif-display text-xl md:text-2xl">{EVENT.time}</p>
                 </div>
                 <div>
