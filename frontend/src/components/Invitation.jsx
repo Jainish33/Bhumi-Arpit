@@ -21,6 +21,7 @@ import Toran from "./motifs/Toran";
 import Paisley from "./motifs/Paisley";
 import OmSymbol from "./motifs/OmSymbol";
 import RosePetals from "./RosePetals";
+import Countdown from "./Countdown";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -98,21 +99,26 @@ export default function Invitation() {
   // GSAP animations
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Ink-write reveal: each word sweeps in from left like golden calligraphy
       gsap.utils.toArray("[data-reveal]").forEach((block) => {
         const words = block.querySelectorAll(".reveal-word");
-        gsap.to(words, {
-          opacity: 1,
-          y: 0,
-          filter: "blur(0px)",
-          duration: 1.1,
-          stagger: 0.08,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: block,
-            start: "top 78%",
-            toggleActions: "play none none reverse",
-          },
-        });
+        gsap.fromTo(
+          words,
+          { opacity: 0, filter: "blur(5px)", clipPath: "inset(0 105% 0 0)" },
+          {
+            opacity: 1,
+            filter: "blur(0px)",
+            clipPath: "inset(0 0% 0 0)",
+            duration: 0.72,
+            stagger: 0.09,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: block,
+              start: "top 78%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
       });
 
       const doveEl = doveRef.current;
@@ -235,7 +241,7 @@ export default function Invitation() {
       {/* ============ ACT 1 · AWAKENING FOREST ============ */}
       <section className="scene" data-testid="act-1-forest">
         <ForestScene />
-        <Particles count={22} />
+        <Particles count={22} variant="firefly" />
         <div className="grain-overlay" />
         <div className="vignette" />
 
@@ -285,7 +291,7 @@ export default function Invitation() {
             background: "radial-gradient(ellipse at 65% 40%, rgba(232,201,106,0.18), transparent 55%)",
           }}
         />
-        <Particles count={18} />
+        <Particles count={18} variant="firefly" />
         <div className="grain-overlay" />
         <div className="vignette" />
 
@@ -353,7 +359,7 @@ export default function Invitation() {
       {/* ============ ACT 3b · TEMPLE HORIZON ============ */}
       <section className="scene" data-testid="act-3-journey-temple">
         <TempleScene />
-        <Particles count={14} />
+        <Particles count={14} variant="incense" />
         <div className="grain-overlay" />
         <div className="vignette" />
 
@@ -390,7 +396,7 @@ export default function Invitation() {
         >
           <Mandala size={420} color="#D4AF37" opacity={0.18} speed={100} />
         </div>
-        <Particles count={16} />
+        <Particles count={16} variant="firefly" />
         <RosePetals />
         <div className="grain-overlay" />
         <div className="vignette" />
@@ -545,10 +551,12 @@ export default function Invitation() {
           </h2>
 
           <p className="mt-8 font-sans-body text-[var(--ivory-dim)] max-w-[34ch]">
-            With hearts full of gratitude, we await your presence on this sacred evening.
+            With hearts full of gratitude, we await your presence on this sacred occasion.
           </p>
 
-          <div className="mt-14 flex flex-col sm:flex-row gap-4">
+          <Countdown />
+
+          <div className="mt-10 flex flex-col sm:flex-row gap-4">
             <a
               href={EVENT.maps}
               target="_blank"
