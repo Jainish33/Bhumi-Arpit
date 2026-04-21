@@ -1,0 +1,71 @@
+{
+  "theme": "Dark",
+  "archetype": "5 (Jewel & Luxury) with 1 (Organic & Earthy) undertones",
+  "colors": {
+    "primary_bg": "#0B1A14",
+    "secondary_bg": "#090D17",
+    "accent_gold": "#D4AF37",
+    "text_ivory": "#F7F4EB",
+    "text_dark": "#0B1A14",
+    "overlay_dark": "rgba(11, 26, 20, 0.7)",
+    "overlay_light": "rgba(247, 244, 235, 0.1)"
+  },
+  "typography": {
+    "primary_font": "Cormorant Garamond, serif",
+    "secondary_font": "Outfit, sans-serif",
+    "headings": {
+      "h1": "text-5xl md:text-6xl tracking-tight text-[#D4AF37] font-serif",
+      "h2": "text-3xl md:text-4xl text-[#F7F4EB] font-serif",
+      "h3": "text-xl md:text-2xl text-[#D4AF37] font-sans uppercase tracking-[0.2em]"
+    },
+    "body": "text-base md:text-lg text-[#F7F4EB]/80 font-sans leading-relaxed"
+  },
+  "layout_and_spacing": {
+    "spacing_scale": "p-4, p-8, p-12, py-24, py-32",
+    "container": "max-w-7xl mx-auto px-6",
+    "mobile_first": true,
+    "generous_spacing": "Sections should be at least 100vh to 200vh tall to allow proper scroll-driven storytelling. Use generous padding to let the imagery breathe."
+  },
+  "motion_and_interactions": {
+    "scroll_library": "gsap with ScrollTrigger and MotionPathPlugin",
+    "smooth_scroll": "Lenis (mandatory for cinematic momentum)",
+    "micro_interactions": "Framer Motion for staggered text reveals and simple UI hovers",
+    "dove_animation": "Fixed dove element with GSAP mapping to scroll progress. Dove moves across the screen and scales down/fades out in Act 4.",
+    "parchment_reveal": "GSAP scaleY from center, unrolling effect when dove lands in Act 4.",
+    "particles": "CSS or Framer Motion floating golden dots moving slowly upwards to simulate magical fireflies/sunrays across Act 1 and Act 2.",
+    "ripple_effect": "CSS radial gradient burst on click/touch in The Journey scene (Act 3)."
+  },
+  "media_assets": {
+    "images": {
+      "awakening_forest_bg": "https://images.unsplash.com/photo-1761920521457-ce2b0dbb67aa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwyfHxteXN0aWNhbCUyMGRhcmslMjBmb3Jlc3QlMjBzdW5yYXlzfGVufDB8fHx8MTc3Njc2MjAxM3ww&ixlib=rb-4.1.0&q=85",
+      "divine_messenger_dove": "https://static.prod-images.emergentagent.com/jobs/a18d11ab-a86c-4b17-91b5-6305f482d719/images/a1e11ecd4f64dfb82c548f3170379eecbce3f2ebb885768ad462f49f23e24d16.png",
+      "journey_river": "https://static.prod-images.emergentagent.com/jobs/a18d11ab-a86c-4b17-91b5-6305f482d719/images/38403f343eb3d74066501a693790a45934cc98096ed62430fef8c732e3b58b97.png",
+      "journey_temple": "https://images.unsplash.com/photo-1765298409890-45d17b3ac8f9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjB0ZW1wbGUlMjBzaWxob3VldHRlfGVufDB8fHx8MTc3Njc2MjAxM3ww&ixlib=rb-4.1.0&q=85",
+      "reveal_parchment": "https://static.prod-images.emergentagent.com/jobs/a18d11ab-a86c-4b17-91b5-6305f482d719/images/92a1f7ff383ee28d47700bffdbc9616c2c3fef0554e53b6f78c0410c55d500a5.png",
+      "ending_lanterns": "https://images.pexels.com/photos/4870192/pexels-photo-4870192.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    },
+    "audio": "Indian flute/sitar ambient track (simulate with a placeholder audio URL or just visual toggle for now)."
+  },
+  "components": {
+    "audio_toggle": "Fixed top right, z-50. Gold icon (Lucide Volume2 / VolumeX) with subtle glowing ring on hover. `data-testid='audio-toggle'`",
+    "skip_to_details": "Fixed bottom right, z-50. Subtle gold text underline, 'Skip to Details'. `data-testid='skip-button'`",
+    "cta_buttons": "Gold border (#D4AF37), transparent background, solid gold on hover with dark text (#0B1A14). Sharp edges with 1px border. Font: Outfit uppercase tracking-widest. `data-testid='cta-button'`",
+    "parchment_card": "Center screen in Act 4. Soft shadow, gold border accents. Text is dark green (#0B1A14). Contains details: Bhumika Darbar & Arpit Patel, Date, Time, Venue."
+  },
+  "instructions_to_main_agent": [
+    "INSTALL and configure 'lenis' for smooth scrolling. This is critical for the cinematic storytelling.",
+    "INSTALL 'gsap' (with ScrollTrigger) for timeline animations and overarching scroll control.",
+    "INSTALL 'framer-motion' for staggered text reveals within sections.",
+    "IMPORT Google Fonts: 'Cormorant Garamond' (weights 400,600,700) and 'Outfit' (weights 300,400,600). DO NOT use Inter.",
+    "STORY STRUCTURE (5 Acts):",
+    "Act 1: Awakening Forest. Use awakening_forest_bg. Overlay dark green. Implement floating gold particles. Stagger text: 'A tale of two souls...'",
+    "Act 2: Divine Messenger. Introduce the divine_messenger_dove (absolute fixed image with z-index 50). Use GSAP ScrollTrigger so the dove moves downwards and across the screen as user scrolls.",
+    "Act 3: The Journey. Transition background to journey_river and journey_temple. Add a subtle ripple interaction effect when clicking on the river section.",
+    "Act 4: The Reveal. Dove 'lands' (stops moving, scales down). reveal_parchment image fades in. Display the invitation details on top of the parchment (Bhumika & Arpit, 10th May 2026, 3:00 PM, Venue).",
+    "Act 5: Ending. Background changes to ending_lanterns (night sky). Show the CTAs 'View Location' (https://share.google/GOfs4sIcSrrG3Gx7o) and 'Add to Calendar'.",
+    "Add 'data-testid' to interactive elements (mute, skip, CTA buttons).",
+    "Ensure maximum contrast. Do NOT use purple or teal. Stick strictly to deep forest green, midnight blue, and gold.",
+    "Make the experience mobile-first, ensuring texts and backgrounds fit within vertical viewports properly like an Instagram Reel.",
+    "Do not use Shadcn for the main layouts. Use pure HTML/Tailwind for the cinematic sections."
+  ]
+}
