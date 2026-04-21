@@ -222,7 +222,13 @@ export default function Invitation() {
       {showSkip && <SkipButton onClick={scrollToDetails} />}
 
       {/* Fixed Dove across all acts */}
-      <div ref={doveRef} className="dove-wrap" aria-hidden="true" data-testid="dove-element">
+      <div
+        ref={doveRef}
+        className="dove-wrap"
+        aria-hidden="true"
+        data-testid="dove-element"
+        style={{ visibility: showSkip ? "visible" : "hidden" }}
+      >
         <Dove />
       </div>
 
