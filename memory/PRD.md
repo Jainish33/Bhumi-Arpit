@@ -45,6 +45,32 @@ mystical Indian forest, mythological + nature/spiritual theme, magical emotional
 - **Tested:** 100% pass on testing_agent_v3 — all 13+ data-testids present, hrefs correct,
   no console errors, mobile + desktop both verified.
 
+## Iteration 2 (2026-02-21) · Full SVG animation overhaul
+User feedback: "photo doesn't give the engagement vibe — keep everything animated, Indian
+wedding + nature + spiritual theme across all scenes." All scene backgrounds rebuilt as
+hand-crafted animated SVG components. Zero stock photos now.
+- **ForestScene** — layered SVG tree silhouettes (swaying), distant rotating mandala-moon,
+  conic sun-ray beams, drifting mist bands, pulsing fireflies, foreground branch with
+  mango leaves.
+- **RiverScene** — golden-hour gradient sky, sun glow with reflection shimmer stripes,
+  distant mountain silhouettes, animated sine-wave water bands, floating lotuses, swaying
+  reeds on the bank.
+- **TempleScene** — symmetric SVG temple silhouette (base, hall, door arch, side towers,
+  stepped shikhara, kalash with mango leaves), giant rotating mandala halo behind, Om
+  symbol floating above with pulse glow, fan-shaped sacred rays, glowing sanctuary inside.
+- **NightScene** — star-twinkle SVG sky (24 stars), crescent moon with gentle rock motion,
+  drifting cloud ribbons, horizon temple-row silhouette, rising lanterns.
+- **Parchment (Act 4) decorated** with: Toran (mango-leaf & marigold garland) at top,
+  4 corner paisleys, inline Om symbol, two lotus floral dividers flanking the `&`, and a
+  row of 3 flickering diyas at the bottom.
+- **New keyframes** in App.css: mandala-spin(-rev), tree-sway, branch-sway, ray-breathe,
+  firefly-pulse, reed-sway, wave-flow, reflection-shift, sun-glow, lotus-float, lotus-bloom,
+  om-pulse, star-twinkle, moon-rock, cloud-drift, flame-dance, flame-glow, toran-sway,
+  parchment-glow.
+- **Tested:** 100% pass on testing_agent_v3 iteration 2 — zero stock image tags, all five
+  scenes animate correctly across mobile/desktop, every motif renders, all event details
+  still legible on parchment.
+
 ## Design System
 - **Colors:** deep forest green `#0B1A14` + midnight `#090D17` + gold `#D4AF37` + ivory `#F7F4EB`.
 - **Typography:** Cormorant Garamond (display), Tenor Sans (accent caps), Outfit (body).
