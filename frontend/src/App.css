@@ -608,6 +608,9 @@ html.lenis { height: auto; }
   100% { transform: scale(2.4); opacity: 0; }
 }
 
+/* ============ Parchment overflow guard ============ */
+.parchment { overflow: hidden; }
+
 /* ============ Medallion frames ============ */
 .medallion-frame {
   width: 88px;
@@ -621,6 +624,16 @@ html.lenis { height: auto; }
   border: 2.5px solid #B48521;
   box-shadow: 0 0 0 1px rgba(212,175,55,0.25), 0 0 18px rgba(212,175,55,0.25);
   flex-shrink: 0;
+  transition: transform 200ms ease-in, box-shadow 200ms ease-in;
+}
+/* Beat impulse — class toggled directly in handleBeat */
+.medallion-beat {
+  transform: scale(1.13) !important;
+  box-shadow:
+    0 0 0 3px rgba(212,175,55,0.9),
+    0 0 0 10px rgba(212,175,55,0.22),
+    0 0 36px rgba(212,175,55,0.65) !important;
+  transition: transform 35ms ease-out, box-shadow 35ms ease-out !important;
 }
 .medallion-letter {
   font-family: "Cormorant Garamond", serif;

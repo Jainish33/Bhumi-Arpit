@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, forwardRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
@@ -48,9 +48,9 @@ const CAL_URL = (() => {
   return `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${dates}`;
 })();
 
-function MedallionFrame({ letter }) {
+const MedallionFrame = forwardRef(function MedallionFrame({ letter }, ref) {
   return (
-    <div className="medallion-frame">
+    <div ref={ref} className="medallion-frame">
       <span className="medallion-letter">{letter}</span>
       <svg
         viewBox="0 0 104 104"
@@ -64,7 +64,7 @@ function MedallionFrame({ letter }) {
       </svg>
     </div>
   );
-}
+});
 
 export default function Invitation() {
   const rootRef = useRef(null);
@@ -72,9 +72,20 @@ export default function Invitation() {
   const parchmentRef = useRef(null);
   const lotusPreviewRef = useRef(null);
   const detailsRef = useRef(null);
+  const bMedRef = useRef(null);
+  const aMedRef = useRef(null);
   const [muted, setMuted] = useState(false);
   const [rippleList, setRippleList] = useState([]);
   const [showSkip, setShowSkip] = useState(true);
+
+  // Direct DOM class toggle — avoids re-renders on every beat
+  const handleBeat = useCallback(() => {
+    [bMedRef.current, aMedRef.current].forEach((el) => {
+      if (!el) return;
+      el.classList.add("medallion-beat");
+      setTimeout(() => el.classList.remove("medallion-beat"), 140);
+    });
+  }, []);
 
   // Lenis smooth scroll
   useEffect(() => {
@@ -225,7 +236,7 @@ export default function Invitation() {
 
   return (
     <div ref={rootRef} className="relative">
-      <AudioToggle muted={muted} setMuted={setMuted} />
+      <AudioToggle muted={muted} setMuted={setMuted} onBeat={handleBeat} />
       {showSkip && <SkipButton onClick={scrollToDetails} />}
 
       <div
@@ -475,7 +486,7 @@ export default function Invitation() {
 
               {/* Photo medallions with "&" divider */}
               <div className="flex justify-center items-center my-5 gap-5">
-                <MedallionFrame letter="B" />
+                <MedallionFrame ref={bMedRef} letter="B" />
                 <div className="flex flex-col items-center gap-0">
                   <Lotus size={28} color="#7a5a1c" opacity={0.75} />
                   <p className="font-serif-display italic text-2xl md:text-3xl text-[#7a5a1c] leading-none my-1">
@@ -483,7 +494,7 @@ export default function Invitation() {
                   </p>
                   <Lotus size={28} color="#7a5a1c" opacity={0.75} />
                 </div>
-                <MedallionFrame letter="A" />
+                <MedallionFrame ref={aMedRef} letter="A" />
               </div>
 
               <p className="font-sans-body text-sm md:text-base text-[var(--ink)]/75">
@@ -493,10 +504,12 @@ export default function Invitation() {
                 {EVENT.groom}
               </h2>
 
-              <div className="flex justify-center mt-8 mb-6">
-                <span className="flourish-line w-full max-w-[280px]">
-                  <span className="font-accent text-[10px] whitespace-nowrap">request the honour of your presence</span>
-                </span>
+              <div className="mt-8 mb-6 w-full px-2">
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B48521]/55 to-transparent mb-3" />
+                <p className="font-accent text-[9px] text-[#7a5a1c] text-center" style={{ letterSpacing: "0.18em" }}>
+                  request the honour of your presence
+                </p>
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B48521]/55 to-transparent mt-3" />
               </div>
 
               <div className="space-y-4 font-sans-body text-[var(--ink)]">
