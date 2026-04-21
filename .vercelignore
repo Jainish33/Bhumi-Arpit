@@ -1,0 +1,10 @@
+# Vercel ignores these when Root Directory is set to `frontend`.
+# Listed here for safety so that any accidental root-level deploy skips them.
+backend/
+memory/
+test_reports/
+tests/
+scripts/
+design_guidelines.json
+README.md
+*.log
