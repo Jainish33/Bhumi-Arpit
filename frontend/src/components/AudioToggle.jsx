@@ -7,9 +7,10 @@ export default function AudioToggle({ muted, setMuted }) {
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
-    a.volume = 0.35;
+    a.volume = 0.72;
     a.loop = true;
-  }, []);
+    a.play().then(() => setMuted(false)).catch(() => setMuted(true));
+  }, [setMuted]);
 
   const toggle = async () => {
     const a = audioRef.current;

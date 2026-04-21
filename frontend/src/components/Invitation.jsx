@@ -33,7 +33,7 @@ const EVENT = {
   dinner: "5:00 PM",
   venue: "Shri Surat Jilla Leuva Patidar Samaj Vadi",
   city: "Surat, Gujarat",
-  maps: "https://share.google/GOfs4sIcSrrG3Gx7o",
+  maps: "https://maps.app.goo.gl/sQTYYgP7wRsGdBBS6",
 };
 
 const CAL_URL = (() => {
@@ -51,7 +51,7 @@ export default function Invitation() {
   const doveRef = useRef(null);
   const parchmentRef = useRef(null);
   const detailsRef = useRef(null);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const [rippleList, setRippleList] = useState([]);
   const [showSkip, setShowSkip] = useState(true);
 
